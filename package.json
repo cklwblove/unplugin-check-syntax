@@ -54,7 +54,7 @@
     "dev": "tsdown -w",
     "play": "npm -C playground run dev",
     "prepublishOnly": "npm run build",
-    "release": "bumpp --commit --push --tag",
+    "release": "bumpp --commit --push --tag && pnpm publish --no-git-checks",
     "start": "tsx src/index.ts",
     "test": "vitest"
   },
