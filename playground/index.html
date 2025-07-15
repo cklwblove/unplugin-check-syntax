@@ -2,12 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unplugin Check Syntax Demo</title>
 </head>
 <body>
-  <div id="app"></div>
-  <a href="/__inspect/#/module?id=./main.ts&index=2" target="_blank" style="text-decoration: none; margin-top:10px; display: block;">visit /__inspect/ to inspect the intermediate state</a>
-  <script type="module" src="./main.ts"></script>
+  <div id="app">
+    <h1>语法检查演示</h1>
+    <p>这个页面包含了现代 JavaScript 语法，在构建时会被检查。</p>
+    <button id="test-btn">测试按钮</button>
+    <div id="output"></div>
+  </div>
+
+  <!-- 内联脚本演示，包含现代语法 -->
+  <script>
+    // 箭头函数和模板字符串 (ES2015)
+    const showMessage = (msg) => {
+      console.log(`Message: ${msg}`);
+    };
+
+    // const 声明 (ES2015)
+    const button = document.getElementById('test-btn');
+    const output = document.getElementById('output');
+
+    // 可选链和空值合并 (ES2020)
+    const config = {
+      theme: 'dark'
+    };
+    const selectedTheme = config?.theme ?? 'light';
+
+    // async/await (ES2017)
+    button?.addEventListener('click', async () => {
+      try {
+        // 使用 fetch API
+        output.innerHTML = 'Loading...';
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        output.innerHTML = `Theme: ${selectedTheme}`;
+        showMessage('Button clicked!');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    });
+
+    // 类语法 (ES2015)
+    class Demo {
+      constructor(name) {
+        this.name = name;
+      }
+
+      greet() {
+        return `Hello from ${this.name}!`;
+      }
+    }
+
+    const demo = new Demo('Syntax Checker');
+    console.log(demo.greet());
+  </script>
+
+  <script type="module" src="/main.ts"></script>
 </body>
 </html>

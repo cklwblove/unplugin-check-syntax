@@ -1,24 +1,27 @@
 {
-  "name": "unplugin-starter",
+  "name": "@winner-fed/unplugin-check-syntax",
   "type": "module",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "packageManager": "pnpm@10.11.0",
-  "description": "",
+  "description": "A universal plugin for checking ECMAScript syntax compatibility across different bundlers",
   "license": "MIT",
-  "homepage": "https://github.com/antfu/unplugin-starter#readme",
+  "homepage": "https://github.com/cklwblove/unplugin-check-syntax#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/antfu/unplugin-starter.git"
+    "url": "git+https://github.com/cklwblove/unplugin-check-syntax.git"
   },
   "bugs": {
-    "url": "https://github.com/antfu/unplugin-starter/issues"
+    "url": "https://github.com/cklwblove/unplugin-check-syntax/issues"
   },
   "keywords": [
     "unplugin",
     "vite",
     "webpack",
     "rollup",
-    "transform"
+    "syntax",
+    "ecmascript",
+    "compatibility",
+    "check"
   ],
   "exports": {
     ".": "./dist/index.js",
@@ -90,7 +93,12 @@
     }
   },
   "dependencies": {
-    "unplugin": "^2.3.4"
+    "unplugin": "^2.3.4",
+    "acorn": "^8.15.0",
+    "browserslist-to-es-version": "^1.0.0",
+    "htmlparser2": "10.0.0",
+    "picocolors": "^1.1.1",
+    "source-map": "^0.7.4"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.2",

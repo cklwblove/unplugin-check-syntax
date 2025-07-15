@@ -1,9 +1,9 @@
-import type { Options } from './types'
+import type { CheckSyntaxOptions } from './types'
 
 import unplugin from '.'
 
-export default (options: Options): any => ({
-  name: 'unplugin-starter',
+export default (options: CheckSyntaxOptions): any => ({
+  name: 'unplugin-check-syntax',
   hooks: {
     'astro:config:setup': async (astro: any) => {
       astro.config.vite.plugins ||= []
