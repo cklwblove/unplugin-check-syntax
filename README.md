@@ -1,6 +1,6 @@
 # unplugin-check-syntax
 
-[![npm version](https://badge.fury.io/js/@winner-fed/unplugin-check-syntax.svg)](https://badge.fury.io/js/@winner-fed/unplugin-check-syntax)
+[![npm version](https://badge.fury.io/js/@winner-fed%2Funplugin-check-syntax.svg)](https://badge.fury.io/js/@winner-fed%2Funplugin-check-syntax)
 
 一个通用的语法检查插件，支持多种构建工具（Webpack、Vite、Rollup、esbuild、Rspack 等），用于检查 JavaScript 和 HTML 文件中的 ECMAScript 语法兼容性。该插件参考了 [rsbuild-plugin-check-syntax](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax)。
 
