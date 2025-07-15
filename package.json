@@ -53,7 +53,6 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown -w",
-    "lint": "eslint .",
     "play": "npm -C playground run dev",
     "prepublishOnly": "npm run build",
     "release": "bumpp && pnpm publish",
@@ -101,12 +100,10 @@
     "source-map": "^0.7.4"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^4.13.2",
     "@nuxt/kit": "^3.17.4",
     "@nuxt/schema": "^3.17.4",
     "@types/node": "^22.15.21",
     "bumpp": "^10.1.1",
-    "eslint": "^9.27.0",
     "nodemon": "^3.1.10",
     "rollup": "^4.41.0",
     "tsdown": "^0.12.0",
