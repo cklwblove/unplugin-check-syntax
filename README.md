@@ -1,6 +1,6 @@
 # unplugin-check-syntax
 
-[![npm version](https://badge.fury.io/js/unplugin-check-syntax.svg)](https://badge.fury.io/js/unplugin-check-syntax)
+[![npm version](https://badge.fury.io/js/@winner-fed/unplugin-check-syntax.svg)](https://badge.fury.io/js/@winner-fed/unplugin-check-syntax)
 
 一个通用的语法检查插件，支持多种构建工具（Webpack、Vite、Rollup、esbuild、Rspack 等），用于检查 JavaScript 和 HTML 文件中的 ECMAScript 语法兼容性。该插件参考了 [rsbuild-plugin-check-syntax](https://github.com/rspack-contrib/rsbuild-plugin-check-syntax)。
 
@@ -15,7 +15,7 @@
 ## 安装
 
 ```bash
-npm install unplugin-check-syntax --save-dev
+npm install @winner-fed/unplugin-check-syntax --save-dev
 ```
 
 ## 使用方法
@@ -25,7 +25,7 @@ npm install unplugin-check-syntax --save-dev
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite'
-import checkSyntax from 'unplugin-check-syntax/vite'
+import checkSyntax from '@winner-fed/unplugin-check-syntax/vite'
 
 export default defineConfig({
   plugins: [
@@ -42,7 +42,7 @@ export default defineConfig({
 
 ```js
 // webpack.config.js
-const checkSyntax = require('unplugin-check-syntax/webpack')
+const checkSyntax = require('@winner-fed/unplugin-check-syntax/webpack')
 
 module.exports = {
   plugins: [
@@ -57,7 +57,7 @@ module.exports = {
 
 ```js
 // rollup.config.js
-import checkSyntax from 'unplugin-check-syntax/rollup'
+import checkSyntax from '@winner-fed/unplugin-check-syntax/rollup'
 
 export default {
   plugins: [
@@ -73,7 +73,7 @@ export default {
 ```js
 // esbuild.config.js
 const { build } = require('esbuild')
-const checkSyntax = require('unplugin-check-syntax/esbuild')
+const checkSyntax = require('@winner-fed/unplugin-check-syntax/esbuild')
 
 build({
   plugins: [
@@ -88,7 +88,7 @@ build({
 
 ```js
 // rspack.config.js
-const checkSyntax = require('unplugin-check-syntax/rspack')
+const checkSyntax = require('@winner-fed/unplugin-check-syntax/rspack')
 
 module.exports = {
   plugins: [
@@ -174,7 +174,7 @@ checkSyntax({
 
 ```diff
 - import { pluginCheckSyntax } from '@rsbuild/plugin-check-syntax'
-+ import checkSyntax from 'unplugin-check-syntax/vite' // 或其他构建工具
++ import checkSyntax from '@winner-fed/unplugin-check-syntax/vite' // 或其他构建工具
 
 export default defineConfig({
   plugins: [
