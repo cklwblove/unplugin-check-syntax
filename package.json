@@ -2,7 +2,6 @@
   "name": "@winner-fed/unplugin-check-syntax",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "pnpm@10.11.0",
   "description": "A universal plugin for checking ECMAScript syntax compatibility across different bundlers",
   "license": "MIT",
   "homepage": "https://github.com/cklwblove/unplugin-check-syntax#readme",
