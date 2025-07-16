@@ -11,7 +11,7 @@ import type {
   EcmaVersion,
   SyntaxErrorKey,
 } from './types.js';
-import { checkIsExclude } from './utils.js';
+import { checkIsExclude, PLUGIN_NAME } from './utils.js';
 
 const HTML_REGEX = /\.html$/;
 export const JS_REGEX: RegExp = /\.(?:js|mjs|cjs|jsx)$/;
@@ -40,13 +40,13 @@ export class CheckSyntax {
 
   constructor(options: CheckSyntaxOptions) {
     if (!options) {
-      throw new Error('[unplugin-check-syntax] `options` is required.');
+      throw new Error('[' + PLUGIN_NAME + '] `options` is required.');
     }
 
     const { targets, ecmaVersion } = options;
     if (!targets && !ecmaVersion) {
       throw new Error(
-        '[unplugin-check-syntax] `targets` or `ecmaVersion` option is required',
+        '[' + PLUGIN_NAME + '] `targets` or `ecmaVersion` option is required',
       );
     }
 
@@ -101,4 +101,4 @@ export class CheckSyntax {
       }
     }
   }
-} 
+}

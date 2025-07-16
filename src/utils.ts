@@ -14,4 +14,6 @@ export function checkIsExclude(
   const normalizedPath = path.replace(/\\/g, '/');
 
   return excludes.some((reg) => reg.test(normalizedPath));
-} 
+}
+
+export const PLUGIN_NAME = 'unplugin-check-syntax';

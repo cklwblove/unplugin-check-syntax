@@ -3,10 +3,17 @@
   "private": true,
   "scripts": {
     "dev": "nodemon -w '../src/**/*.ts' -e .ts -x vite",
-    "build": "vite build"
+    "build": "vite build",
+    "build:rspack": "rspack build",
+    "build:rsbuild": "rsbuild build",
+    "test:rspack": "npm run build:rspack"
   },
   "devDependencies": {
     "vite": "^6.3.5",
-    "vite-plugin-inspect": "^11.1.0"
+    "vite-plugin-inspect": "^11.1.0",
+    "@winner-fed/unplugin-check-syntax": "workspace:*",
+    "@rspack/cli": "^1.0.0",
+    "@rsbuild/core": "^1.4.2",
+    "@rspack/core": "^1.0.0"
   }
 }

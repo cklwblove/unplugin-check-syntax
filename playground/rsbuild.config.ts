@@ -1,16 +1,26 @@
 import path from 'node:path';
 import { defineConfig } from '@rsbuild/core';
-import { pluginCheckSyntax } from '../src';
+import UnpluginCheckSyntax from '@winner-fed/unplugin-check-syntax/rspack';
 
 export default defineConfig({
   source: {
-    exclude: [path.resolve(__dirname, './src/test.js')],
+    entry: {
+      index: path.resolve(__dirname, './main.ts')
+    },
   },
   output: {
     sourceMap: {
       js: 'source-map',
     },
-    overrideBrowserslist: ['ie 11'],
+    // overrideBrowserslist: ['ie 11'],
   },
-  plugins: [pluginCheckSyntax()],
+  tools: {
+    rspack: {
+      plugins: [
+        UnpluginCheckSyntax({
+          ecmaVersion: 2015,
+        }),
+      ],
+    },
+  }
 });

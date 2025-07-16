@@ -2,6 +2,7 @@ import type { CheckSyntaxOptions } from './types'
 import { addVitePlugin, addWebpackPlugin, defineNuxtModule } from '@nuxt/kit'
 import vite from './vite'
 import webpack from './webpack'
+import { PLUGIN_NAME } from './utils.js';
 
 export interface ModuleOptions extends CheckSyntaxOptions {
 
@@ -9,7 +10,7 @@ export interface ModuleOptions extends CheckSyntaxOptions {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'unplugin-check-syntax',
+    name: PLUGIN_NAME,
     configKey: 'checkSyntax',
   },
   defaults: {

@@ -4,21 +4,27 @@ import { createUnplugin } from 'unplugin';
 import { CheckSyntax } from './checkSyntax.js';
 import { printErrors } from './printErrors.js';
 import type { CheckSyntaxOptions } from './types.js';
-import { checkIsExclude } from './utils.js';
+import { checkIsExclude, PLUGIN_NAME } from './utils.js';
 
 const HTML_REGEX = /\.html$/;
 const JS_REGEX: RegExp = /\.(?:js|mjs|cjs|jsx)$/;
 
-export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = (options = {}) => {
-  const checker = new CheckSyntax({
+export const unpluginFactory: UnpluginFactory<
+  CheckSyntaxOptions | undefined
+> = (options = {}) => {
+  // 提供默认的ecmaVersion以确保类型兼容
+  const checkerOptions = {
     rootPath: process.cwd(),
-    ...options,
-  });
+    ecmaVersion: 2015 as const, // 默认ES2015
+    ...options
+  };
+
+  const checker = new CheckSyntax(checkerOptions);
 
   return {
-    name: 'unplugin-check-syntax',
+    name: PLUGIN_NAME,
 
-    // For webpack and rspack
+    // For webpack
     webpack(compiler) {
       // Skip in development mode
       if (compiler.options.mode === 'development') {
@@ -26,7 +32,7 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
       }
 
       compiler.hooks.afterEmit.tapPromise(
-        'unplugin-check-syntax',
+        PLUGIN_NAME,
         async (compilation) => {
           const outputPath = compilation.outputOptions.path || 'dist';
 
@@ -44,17 +50,130 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
             .filter(Boolean);
 
           const files = emittedAssets.filter(
-            (assets) => HTML_REGEX.test(assets) || JS_REGEX.test(assets),
+            (assets) => HTML_REGEX.test(assets) || JS_REGEX.test(assets)
           );
 
           await Promise.all(
             files.map(async (file) => {
               await checker.check(file);
-            }),
+            })
           );
 
-          printErrors(checker.errors, checker.ecmaVersion, checker.excludeErrorLogs);
-        },
+          printErrors(
+            checker.errors,
+            checker.ecmaVersion,
+            checker.excludeErrorLogs
+          );
+        }
+      );
+    },
+
+    // For rspack
+    rspack(compiler: any) {
+      // Skip in development mode
+      if (compiler.options.mode === 'development') {
+        return;
+      }
+
+      compiler.hooks.afterEmit.tapPromise(
+        PLUGIN_NAME,
+        async (compilation: any) => {
+          const outputPath = compilation.outputOptions.path || 'dist';
+
+          // not support compilation.emittedAssets in Rspack
+          // TODO 这里验证发现 rspack 的 compilation.getAssets() 是不包含子目录的和html文件的
+          const emittedAssets = Array.from(
+            compilation.getAssets().filter((a) => a.source) || []
+          )
+            .map((a) => {
+              const nameStr = String(a.name);
+              // remove query from name
+              const resourcePath = nameStr.split('?')[0];
+              const file = resolve(outputPath, resourcePath);
+              if (!checkIsExclude(file, checker.excludeOutput)) {
+                return file;
+              }
+              return '';
+            })
+            .filter(Boolean);
+
+          console.log(emittedAssets);
+          const files = emittedAssets.filter(
+            (assets) => HTML_REGEX.test(assets) || JS_REGEX.test(assets)
+          );
+
+          await Promise.all(
+            files.map(async (file) => {
+              await checker.check(file);
+            })
+          );
+
+          printErrors(
+            checker.errors,
+            checker.ecmaVersion,
+            checker.excludeErrorLogs
+          );
+          // try {
+          //   // For rspack, use file system scanning to get complete output files
+          //   // as compilation.assets and getAllAssets() may not capture all files including subdirectories
+          //   const fs = await import('node:fs');
+          //   const path = await import('node:path');
+          //
+          //   const scanDirectory = (dir: string): string[] => {
+          //     const files: string[] = [];
+          //     try {
+          //       const entries = fs.readdirSync(dir, { withFileTypes: true });
+          //
+          //       for (const entry of entries) {
+          //         const fullPath = path.join(dir, entry.name);
+          //
+          //         if (entry.isDirectory()) {
+          //           // Recursively scan subdirectories
+          //           files.push(...scanDirectory(fullPath));
+          //         } else if (entry.isFile()) {
+          //           files.push(fullPath);
+          //         }
+          //       }
+          //     } catch (error) {
+          //       console.warn(`[${PLUGIN_NAME}] Could not scan directory ${dir}:`, error);
+          //     }
+          //
+          //     return files;
+          //   };
+          //
+          //   // Get all files from output directory
+          //   const allFiles = scanDirectory(outputPath);
+          //
+          //   // Filter files that are not excluded
+          //   const emittedAssets = allFiles.filter(file =>
+          //     !checkIsExclude(file, checker.excludeOutput)
+          //   );
+          //
+          //   // Filter to only HTML and JS files
+          //   const files = emittedAssets.filter(
+          //     (file) => HTML_REGEX.test(file) || JS_REGEX.test(file)
+          //   );
+          //
+          //   if (files.length === 0) {
+          //     console.warn('[' + PLUGIN_NAME + '] No HTML or JS files found in rspack output');
+          //     return;
+          //   }
+          //
+          //   await Promise.all(
+          //     files.map(async (file) => {
+          //       await checker.check(file);
+          //     })
+          //   );
+          //
+          //   printErrors(
+          //     checker.errors,
+          //     checker.ecmaVersion,
+          //     checker.excludeErrorLogs
+          //   );
+          // } catch (error) {
+          //   console.error('[' + PLUGIN_NAME + '] Error during rspack file processing:', error);
+          // }
+        }
       );
     },
 
@@ -81,12 +200,16 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
           await Promise.all(
             files.map(async (file) => {
               await checker.check(file);
-            }),
+            })
           );
 
-          printErrors(checker.errors, checker.ecmaVersion, checker.excludeErrorLogs);
-        },
-      },
+          printErrors(
+            checker.errors,
+            checker.ecmaVersion,
+            checker.excludeErrorLogs
+          );
+        }
+      }
     },
 
     // For Rollup
@@ -111,19 +234,26 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
           await Promise.all(
             files.map(async (file) => {
               await checker.check(file);
-            }),
+            })
           );
 
-          printErrors(checker.errors, checker.ecmaVersion, checker.excludeErrorLogs);
-        },
-      },
+          printErrors(
+            checker.errors,
+            checker.ecmaVersion,
+            checker.excludeErrorLogs
+          );
+        }
+      }
     },
 
     // For esbuild
     esbuild: {
       setup(build) {
-        // Skip in development mode
-        if (build.initialOptions.watch) {
+        // Skip in development mode - check for watch mode properly
+        const isWatchMode =
+          (build.initialOptions as any).watch !== undefined &&
+          (build.initialOptions as any).watch !== false;
+        if (isWatchMode) {
           return;
         }
 
@@ -148,13 +278,17 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
           await Promise.all(
             files.map(async (file) => {
               await checker.check(file);
-            }),
+            })
           );
 
-          printErrors(checker.errors, checker.ecmaVersion, checker.excludeErrorLogs);
+          printErrors(
+            checker.errors,
+            checker.ecmaVersion,
+            checker.excludeErrorLogs
+          );
         });
-      },
-    },
+      }
+    }
   };
 };
 
