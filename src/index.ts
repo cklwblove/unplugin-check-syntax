@@ -17,7 +17,7 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
 
   return {
     name: 'unplugin-check-syntax',
-    
+
     // For webpack and rspack
     webpack(compiler) {
       // Skip in development mode
@@ -29,7 +29,7 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
         'unplugin-check-syntax',
         async (compilation) => {
           const outputPath = compilation.outputOptions.path || 'dist';
-          
+
           // Get all emitted assets
           const emittedAssets = Array.from(compilation.emittedAssets || [])
             .map((name) => {
@@ -66,7 +66,7 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
         order: 'post',
         handler: async (options, bundle) => {
           const outputDir = options.dir || 'dist';
-          
+
           const files = Object.keys(bundle)
             .map((fileName) => {
               const file = resolve(outputDir, fileName);
@@ -96,7 +96,7 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
         order: 'post',
         handler: async (options, bundle) => {
           const outputDir = options.dir || 'dist';
-          
+
           const files = Object.keys(bundle)
             .map((fileName) => {
               const file = resolve(outputDir, fileName);
@@ -134,7 +134,7 @@ export const unpluginFactory: UnpluginFactory<CheckSyntaxOptions | undefined> = 
 
           const outputDir = build.initialOptions.outdir || 'dist';
           const outputFiles = result.outputFiles || [];
-          
+
           const files = outputFiles
             .map((file) => {
               if (!checkIsExclude(file.path, checker.excludeOutput)) {
@@ -163,5 +163,5 @@ export const unplugin = /* #__PURE__ */ createUnplugin(unpluginFactory);
 export default unplugin;
 
 // Export types and utilities
-export type { CheckSyntaxOptions } from './types.js';
+export type { CheckSyntaxOptions, EcmaVersion } from './types.js';
 export { CheckSyntax } from './checkSyntax.js';
