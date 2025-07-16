@@ -21,6 +21,11 @@ export interface CheckSyntaxOptions {
    */
   excludeOutput?: CheckSyntaxExclude;
   /**
+   * Used to manually include additional JS or HTML files for syntax checking.
+   * You can pass in an array of file paths (relative to rootPath) or glob patterns.
+   */
+  include?: string[];
+  /**
    * The minimum ECMAScript syntax version that can be used in the build artifact.
    * The priority of `ecmaVersion` is higher than `targets`.
    */

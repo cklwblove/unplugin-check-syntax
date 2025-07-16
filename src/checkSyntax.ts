@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import { parse } from 'acorn';
 import { browserslistToESVersion } from 'browserslist-to-es-version';
+import { glob } from 'glob';
 import { generateError } from './generateError.js';
 import { generateHtmlScripts } from './generateHtmlScripts.js';
 import type {
@@ -36,6 +37,8 @@ export class CheckSyntax {
 
   excludeOutput: CheckSyntaxExclude | undefined;
 
+  include: string[] | undefined;
+
   excludeErrorLogs: SyntaxErrorKey[];
 
   constructor(options: CheckSyntaxOptions) {
@@ -55,8 +58,41 @@ export class CheckSyntax {
 
     this.exclude = options.exclude;
     this.excludeOutput = options.excludeOutput;
+    this.include = options.include;
     this.rootPath = options.rootPath || '';
     this.excludeErrorLogs = options.excludeErrorLogs || [];
+  }
+
+  async getIncludeFiles(): Promise<string[]> {
+    if (!this.include || this.include.length === 0) {
+      return [];
+    }
+
+    const files: string[] = [];
+    
+    for (const pattern of this.include) {
+      try {
+        // Support both absolute paths and patterns relative to rootPath
+        const searchPattern = pattern.startsWith('/') ? pattern : `${this.rootPath}/${pattern}`;
+        const matchedFiles = await glob(searchPattern, {
+          ignore: ['**/node_modules/**'],
+          absolute: true
+        });
+        
+        // Filter to only include JS and HTML files
+        const filteredFiles = matchedFiles.filter(file => 
+          (HTML_REGEX.test(file) || JS_REGEX.test(file)) && 
+          !checkIsExclude(file, this.exclude)
+        );
+        
+        files.push(...filteredFiles);
+      } catch (error) {
+        console.warn(`[${PLUGIN_NAME}] Error processing include pattern "${pattern}":`, error);
+      }
+    }
+
+    // Remove duplicates
+    return Array.from(new Set(files));
   }
 
   async check(filepath: string, code?: string) {

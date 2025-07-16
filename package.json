@@ -96,7 +96,8 @@
     "browserslist-to-es-version": "^1.0.0",
     "htmlparser2": "10.0.0",
     "picocolors": "^1.1.1",
-    "source-map": "^0.7.4"
+    "source-map": "^0.7.4",
+    "glob": "^11.0.0"
   },
   "devDependencies": {
     "@nuxt/kit": "^3.17.4",

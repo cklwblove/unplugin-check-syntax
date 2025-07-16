@@ -53,8 +53,15 @@ export const unpluginFactory: UnpluginFactory<
             (assets) => HTML_REGEX.test(assets) || JS_REGEX.test(assets)
           );
 
+          // Add include files
+          const includeFiles = await checker.getIncludeFiles();
+          files.push(...includeFiles);
+
+          // Remove duplicates
+          const uniqueFiles = Array.from(new Set(files));
+
           await Promise.all(
-            files.map(async (file) => {
+            uniqueFiles.map(async (file) => {
               await checker.check(file);
             })
           );
@@ -83,9 +90,9 @@ export const unpluginFactory: UnpluginFactory<
           // not support compilation.emittedAssets in Rspack
           // TODO 这里验证发现 rspack 的 compilation.getAssets() 是不包含子目录的和html文件的
           const emittedAssets = Array.from(
-            compilation.getAssets().filter((a) => a.source) || []
+            compilation.getAssets().filter((a: any) => a.source) || []
           )
-            .map((a) => {
+            .map((a: any) => {
               const nameStr = String(a.name);
               // remove query from name
               const resourcePath = nameStr.split('?')[0];
@@ -101,8 +108,15 @@ export const unpluginFactory: UnpluginFactory<
             (assets) => HTML_REGEX.test(assets) || JS_REGEX.test(assets)
           );
 
+          // Add include files
+          const includeFiles = await checker.getIncludeFiles();
+          files.push(...includeFiles);
+
+          // Remove duplicates
+          const uniqueFiles = Array.from(new Set(files));
+
           await Promise.all(
-            files.map(async (file) => {
+            uniqueFiles.map(async (file) => {
               await checker.check(file);
             })
           );
@@ -196,8 +210,15 @@ export const unpluginFactory: UnpluginFactory<
             .filter(Boolean)
             .filter((file) => HTML_REGEX.test(file) || JS_REGEX.test(file));
 
+          // Add include files
+          const includeFiles = await checker.getIncludeFiles();
+          files.push(...includeFiles);
+
+          // Remove duplicates
+          const uniqueFiles = Array.from(new Set(files));
+
           await Promise.all(
-            files.map(async (file) => {
+            uniqueFiles.map(async (file) => {
               await checker.check(file);
             })
           );
@@ -230,8 +251,15 @@ export const unpluginFactory: UnpluginFactory<
             .filter(Boolean)
             .filter((file) => HTML_REGEX.test(file) || JS_REGEX.test(file));
 
+          // Add include files
+          const includeFiles = await checker.getIncludeFiles();
+          files.push(...includeFiles);
+
+          // Remove duplicates
+          const uniqueFiles = Array.from(new Set(files));
+
           await Promise.all(
-            files.map(async (file) => {
+            uniqueFiles.map(async (file) => {
               await checker.check(file);
             })
           );
@@ -274,8 +302,15 @@ export const unpluginFactory: UnpluginFactory<
             .filter(Boolean)
             .filter((file) => HTML_REGEX.test(file) || JS_REGEX.test(file));
 
+          // Add include files
+          const includeFiles = await checker.getIncludeFiles();
+          files.push(...includeFiles);
+
+          // Remove duplicates
+          const uniqueFiles = Array.from(new Set(files));
+
           await Promise.all(
-            files.map(async (file) => {
+            uniqueFiles.map(async (file) => {
               await checker.check(file);
             })
           );
