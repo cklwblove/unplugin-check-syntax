@@ -331,5 +331,6 @@ export const unplugin = /* #__PURE__ */ createUnplugin(unpluginFactory);
 export default unplugin;
 
 // Export types and utilities
-export type { CheckSyntaxOptions, EcmaVersion } from './types.js';
+export type { CheckSyntaxOptions, EcmaVersion, ECMASyntaxError, SyntaxErrorKey } from './types.js';
 export { CheckSyntax } from './checkSyntax.js';
+export { printErrors } from './printErrors.js';
