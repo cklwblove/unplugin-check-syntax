@@ -97,7 +97,6 @@ export const unpluginFactory: UnpluginFactory<
             })
             .filter(Boolean);
 
-          console.log(emittedAssets);
           const files = emittedAssets.filter(
             (assets) => HTML_REGEX.test(assets) || JS_REGEX.test(assets)
           );
